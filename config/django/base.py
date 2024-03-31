@@ -18,6 +18,7 @@ LOCAL_APPS = [
     'gallery.common.apps.CommonConfig',
     'gallery.users.apps.UsersConfig',
     'gallery.authentication.apps.AuthenticationConfig',
+    'gallery.mediahub.apps.MediahubConfig',
 ]
 
 THIRD_PARTY_APPS = [
@@ -114,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-AUTH_USER_MODEL = 'users.BaseUser'
+AUTH_USER_MODEL = 'users.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -144,7 +145,11 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': []
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        
+    ]
 }
 
 
