@@ -9,11 +9,9 @@ class Media(BaseModel):
 
     name = models.CharField(max_length=50)
 
-    description = models.TextField()
-
-    file = models.FileField(upload_to=path_media_file)
-
-    tags = ArrayField(base_field=models.CharField(max_length=30))
+    description = models.TextField(null=True, blank=True)
+    file = models.FileField(upload_to=path_media_file, null=True, blank=True)
+    tags = ArrayField(base_field=models.CharField(max_length=30), null=True, blank=True)
 
     user = models.ForeignKey(
         to=get_user_model(), 

@@ -2,8 +2,8 @@ from config.env import env
 
 # https://docs.celeryproject.org/en/stable/userguide/configuration.html
 
-CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='amqp://guest:guest@localhost//')
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://redis:6379')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default='redis://redis:6379')
 
 CELERY_TIMEZONE = 'UTC'
 

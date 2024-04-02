@@ -6,5 +6,13 @@ urlpatterns = [
     path(
         "users/",
         include(('gallery.users.urls', "users"), namespace="users"),
-    )
+    ),
+    path(
+        'auth/',
+        include(("gallery.authentication.urls", "authentication"), namespace="authentication")
+    ),
+    path(
+        'media/',
+        include(("gallery.mediahub.urls", "media"), namespace="media")
+    ),
 ]

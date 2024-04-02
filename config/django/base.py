@@ -11,6 +11,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
+CORS_ALLOWED_ORIGINS = ["http://localhost:8080", "http://127.0.0.1:8000"]
+
+CORS_ORIGIN_WHITELIST = (
+
+    '127.0.0.1:8000',
+    'localhost:8000',
+    'localhost:8081',
+    'localhost',
+    'localhost:8888',
+)
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
 
 # Application definition
 LOCAL_APPS = [
@@ -83,7 +95,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': env.db('DATABASE_URL', default='psql://postgres:postgres@127.0.0.1:5432/gallery'),
 }
-DATABASES['default']['ATOMIC_REQUESTS'] = True
+# DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
@@ -146,6 +158,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
         
@@ -175,3 +188,4 @@ from config.settings.celery import *  # noqa
 from config.settings.swagger import *  # noqa
 #from config.settings.sentry import *  # noqa
 #from config.settings.email_sending import *  # noqa
+from config.settings.s3 import *
