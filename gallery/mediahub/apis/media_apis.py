@@ -5,11 +5,12 @@ from gallery.utils.pagination import LimitOffsetPagination
 from gallery.mediahub.tasks import media_file_upload
 from django.conf import settings
 from drf_spectacular.utils import extend_schema
+from rest_framework.request import Request
+
 
 from gallery.mediahub.serializers.media_serializers import (
     InputMediaSerializer,
     OutputMediaSerializer,
-    InputFileUploadSerializer,
     MediaFilterSerializer
 )
 
@@ -22,7 +23,7 @@ from gallery.mediahub.services.media_services import (
 class MediaApi(APIView, LimitOffsetPagination):
 
     @extend_schema(request=InputMediaSerializer)
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         serializer = InputMediaSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         file = request.FILES.get("file")
@@ -50,7 +51,7 @@ class MediaApi(APIView, LimitOffsetPagination):
         return Response(OutputMediaSerializer(media, ).data, status=status.HTTP_201_CREATED)
     
     @extend_schema(responses=OutputMediaSerializer, parameters=[MediaFilterSerializer])
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs):
 
         filters_serializer = MediaFilterSerializer(data=request.query_params)
         filters_serializer.is_valid(raise_exception=True)
@@ -68,27 +69,23 @@ class MediaApi(APIView, LimitOffsetPagination):
         
         return Response(response, status=status.HTTP_200_OK)
         
-
-
-
-        medias = MediaService.media_list(
-            filters={
-                "user": request.user,
-
-            }
-        )
-        return Response(OutputMediaSerializer(medias, many=True).data, status=status.HTTP_200_OK)
-
-        ...
-
 class MediaDetailApi(APIView):
-    def get(self, request, media_id):
+
+    @extend_schema(responses=OutputMediaSerializer)
+    def get(self, request: Request, media_id: int):
+        try:
+            media = MediaService.get_media(media_id=media_id)
+        except Media.DoesNotExist as e:
+            raise exceptions.NotFound(
+                {"message": "media with provided media_id does not exists."}
+            )
+        serializer = OutputMediaSerializer(media)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request: Request, media_id: int):
         ...
 
-    def put(self, request, media_id):
-        ...
-
-    def delete(self, request, media_id):
+    def delete(self, request: Request, media_id: int):
         ...
 
 # class MyMediaApi(APIView):
@@ -116,16 +113,16 @@ class MediaDetailApi(APIView):
 
 # class UserProfileApi(APIView):
     
-#     @extend_schema(responses=OutputUserSerializer)
-#     def get(self, request, user_id):
-#         try:
-#             user = UserService.get_user(user_id=user_id)
-#         except User.DoesNotExist as e:
-#             raise exceptions.NotFound(
-#                 {"message": "user with provided user_id does not exists."}
-#             )
-#         serializer = OutputUserSerializer(user)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
+    # @extend_schema(responses=OutputUserSerializer)
+    # def get(self, request, user_id):
+    #     try:
+    #         user = UserService.get_user(user_id=user_id)
+    #     except User.DoesNotExist as e:
+    #         raise exceptions.NotFound(
+    #             {"message": "user with provided user_id does not exists."}
+    #         )
+    #     serializer = OutputUserSerializer(user)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
 # class UsersListApi(APIView, LimitOffsetPagination):
     
