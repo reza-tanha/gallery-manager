@@ -5,6 +5,6 @@ from datetime import timedelta
 # Read everything from here - https://styria-digital.github.io/django-rest-framework-jwt/#additional-settings
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=500),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }

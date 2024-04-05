@@ -1,22 +1,19 @@
 from django.db import transaction 
-from gallery.users.models import User
+from django.db.models import QuerySet
 from gallery.mediahub.models import Media
-from django.contrib.auth import get_user_model
 from gallery.common.services import model_update
 from gallery.mediahub.filters import MediaFilter
 from django.core.files.storage import FileSystemStorage
+from django.shortcuts import get_object_or_404
 from django.core.files import File
-import os
-from django.conf import settings
-
-
-
+        # return get_object_or_404(Media, pk=media_id, **kwargs)
+import os#
 
 class MediaService:
 
     @staticmethod
-    def get_media(*, media_id: int)-> User:
-        return Media.objects.get(pk=media_id)
+    def get_media(*, media_id: int, **kwargs)-> Media:
+        return Media.objects.get(pk=media_id, **kwargs)
     
     @staticmethod
     def media_create(*, user_id, **kwargs) -> Media:      
@@ -28,7 +25,7 @@ class MediaService:
 
     @transaction.atomic
     @staticmethod
-    def media_update(*, media:Media, data):
+    def media_update(*, media:Media, data) -> Media:
         non_side_effect_fields = ["name", "description", "file", "tags"]
         media, has_update = model_update(
             instance=media, 
@@ -50,7 +47,7 @@ class MediaService:
         return file
 
     @staticmethod
-    def media_list(*, filters=None):
+    def media_list(*, filters=None) -> QuerySet[Media]:
         filters = filters or {}
         qs = Media.objects.all()
         return MediaFilter(filters, qs).qs
