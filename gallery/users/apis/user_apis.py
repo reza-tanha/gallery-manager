@@ -20,7 +20,7 @@ from gallery.users.services.user_services import (
 )
 
 
-
+@extend_schema(tags=['users'])
 class RegisterApi(APIView):
     @extend_schema(request=InputRegisterSerializer, responses=OutPutRegisterSerializer)
     def post(self, request):
@@ -38,6 +38,7 @@ class RegisterApi(APIView):
                     )
         return Response(OutPutRegisterSerializer(user, context={"request":request}).data)
 
+@extend_schema(tags=['users'])
 class UserProfileApi(APIView):
     
     @extend_schema(responses=OutputUserSerializer)
@@ -51,6 +52,7 @@ class UserProfileApi(APIView):
         serializer = OutputUserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+@extend_schema(tags=['users'])
 class UsersListApi(APIView, LimitOffsetPagination):
     
     @extend_schema(responses=OutputUserSerializer, parameters=[UserFilterSerializer])

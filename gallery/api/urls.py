@@ -7,6 +7,7 @@ urlpatterns = [
         "users/",
         include(('gallery.users.urls', "users"), namespace="users"),
     ),
+
     path(
         'auth/',
         include(("gallery.authentication.urls", "authentication"), namespace="authentication")

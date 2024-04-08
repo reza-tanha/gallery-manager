@@ -50,9 +50,7 @@ class FilePathTmp:
         return self.request.FILES.getlist(self.field_name, None)
         
     def main(self):
-        print(self.get_files())
         if files := self.get_files():
-            print("ddddddddddddddd")
             for _field in files:
                 self.fields_data.append(
                     _field.temporary_file_path()
