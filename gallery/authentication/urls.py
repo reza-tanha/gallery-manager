@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from drf_spectacular.utils import extend_schema
 
-
+#just for test push
 @extend_schema(tags=["auth"])
 class _TokenObtainPairView(TokenObtainPairView):
     pass
