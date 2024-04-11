@@ -190,3 +190,4 @@ from config.settings.swagger import *  # noqa
 #from config.settings.sentry import *  # noqa
 #from config.settings.email_sending import *  # noqa
 from config.settings.s3 import *
+from config.settings.google import *
