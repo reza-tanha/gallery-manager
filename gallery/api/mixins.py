@@ -32,9 +32,13 @@ if TYPE_CHECKING:
 else:
     PermissionClassesType = Sequence[Type[BasePermission]]
 
+class IsUserActive(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user.is_active
 
 class ApiAuthMixin:
     authentication_classes: Sequence[Type[BaseAuthentication]] = [
             JWTAuthentication,
     ]
-    permission_classes: PermissionClassesType = (IsAuthenticated, )
+    permission_classes: PermissionClassesType = (IsAuthenticated, IsUserActive)
